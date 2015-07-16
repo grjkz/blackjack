@@ -1,6 +1,67 @@
-h1{
-	color: red;
-	font-size: 150%;
-	position:center;
+* {
+	border: black solid 2px;
 }
 
+body {
+	text-align: center;
+	width: 1300px;
+	height: 600px;
+
+}
+.dealer {
+	text-align: left;
+	display: inline-block;
+	position: relative;
+	
+}
+.dealer img {
+	width: 70px;
+}
+
+/*.dealer-info {
+	text-align: center;
+	display: inline-block;
+	position: absolute;
+}
+.dealer-name {
+	margin-bottom: 30%;
+}
+.deal-total {
+	width: 50px;
+	
+}*/
+
+.dealArea {
+	width: 100%;
+	height: 200px;
+}
+
+.comment {
+	padding: 10px;
+	color: red;
+	font-size: 1.5em;
+}
+
+.bet {
+	display: inline-block;
+/*	text-align: right;  use this if you remove float from .betButton*/
+}
+
+.bank, .bankWord {
+	float: left;
+	margin-top: 5px;
+	margin-right: 10px;
+
+}
+.betButton, .betAmt {
+	float:right;
+}
+
+.smallImg {
+	position: relative;
+	height: 120px;
+}
+
+.playerHand {
+
+}

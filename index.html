@@ -2,17 +2,51 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<title>Blackjack by grjkz</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 
+
 <body>
-	<h1></h1>
+	<h1>BLACKJACK</h1>
+
+	<div class='dealer'>
+		<img class='dealer-img' src="http://newsball.com/wp-content/uploads/2013/07/2071402-male_shadow.jpg" alt="Dealer">
+<!-- 		<div class='dealer-info'>
+			<p class='dealer-name'>Dealer</p>
+			<p class="dealer-total">Total
+				<p class='total-value'>21</p>
+			</p>
+		</div> -->
+	</div>
+
+
+	<div class='dealArea dealerHand'>Dealer's Cards Here</div>
+	<div class='comment'>Comments Area</div>
+	<div class='dealArea playerHand'>Player's Cards<br>
+		
+	</div>
+
+	<div class='row actions'>
+		<div class='one-third column bet'>
+			<p class='bankWord'>Bank:</p>
+			<p class='bank'>1000</p>
+			<button class='betButton'>Bet</button>
+			<input class='betAmt' type="text" placeholder='Bet Amount'/>
+		</div>
+		<div class='two-thirds column actions'>
+			<button class='hit'>HIT</button>
+			<button class='stand'>STAND</button>
+			<button class='double'>Double</button>
+	</div>
+</div>
+
 	
 </body>
 
-<script src ="scripts/main.js"></script>
+<script src="scripts/main.js"></script>
 
 </html>
