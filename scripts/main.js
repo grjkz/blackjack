@@ -25,7 +25,7 @@ var dealAreas = $('.dealArea');
 
 betButton.click(function() {
 	initState();  // 
-	console.log("bet clicked");
+	// console.log("bet clicked");
 	bet = parseInt(betAmt.val());
 	if (bet > playerBank) {
 		comment.text("You don't have that much money.");
@@ -45,27 +45,33 @@ betButton.click(function() {
 
 
 hit.click(function() {
-	console.log("hit button clicked");
+	// console.log("hit button clicked");
 	deal(1);
 	
 });
 
 dbl.click(function() {
-	console.log("double button clicked");
+	// console.log("double button clicked");
 	playerBank -= bet;
 	bet *=2;
 	bankOutput.text(playerBank);
 	deal(1);
-	if (playerTotal < 22) {
+	if (playerTotal < 22) { // player is still good with aces
 		deal(2);
 	}
-	else {
-		winner()
+	else { // over 21: check for aces
+		playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
+		if (playerTotal < 22) {  //if player is still less than 22
+			deal(2);
+		}
+		else {					//player busted
+			winner();
+		}
 	}
 })
 
 stand.click(function() {
-	console.log("stand button clicked");
+	// console.log("stand button clicked");
 	deal(2);
 })
 
@@ -83,7 +89,7 @@ function initState() {
 	// shuffle();
 	comment.text('');
 	playerTotal = dealerTotal = 0;
-	console.log("init ran");
+	// console.log("init ran");
 }
 
 
@@ -138,40 +144,41 @@ function newDeck() {
 	// console.log("deck has been shuffled");
 	
 	
-	//displays imgs of the shuffled deck
-	for (var i = 0; i < deck.length; i++) {
-//		console.log("rank: "+deck[i].rank + "  suit: "+ deck[i].suit);
-		$('.deck').append($('<img class="smallImg" src="'+ deck[i].image +'">'));
-	}
+	// //displays imgs of the shuffled deck
+	// for (var i = 0; i < deck.length; i++) {
+		// console.log("rank: "+deck[i].rank + "  suit: "+ deck[i].suit);
+	// 	$('.deck').append($('<img class="smallImg" src="'+ deck[i].image +'">'));
+	// }
 }
 
 
 function deal(num) {
 	if (num === 0) {
-//		console.log("dealing...");
+		// console.log("dealing...");
 		playerCards.push(deck.shift());
-		//playerTotal += playerCards[0].value;
 		playerHand.append($('<img class="smallImg" src="'+ playerCards[0].image +'">'));
 		
 		dealerCards.push(deck.shift());
-		//dealerTotal += dealerCards[0].value;
 		dealerHand.append($('<img class="smallImg" src="'+ dealerCards[0].image +'">'));
 		
 		playerCards.push(deck.shift());
-		//playerTotal += playerCards[1].value;
 		playerHand.append($('<img class="smallImg" src="'+ playerCards[1].image +'">'));
 
+		//hole card
 		dealerCards.push(deck.shift());
-		//dealerTotal += dealerCards[1].value;
-		dealerHand.append($('<img class="smallImg" src="'+ dealerCards[1].image +'">'));
+		dealerHand.append($('<img class="smallImg" src="deckimg/hole.png">')); // hole card img
 		
-		for (var t = 0; t < playerCards.length; t++) {
+		for (var t = 0; t < 2; t++) {
 			playerTotal += playerCards[t].value;
 			dealerTotal += dealerCards[t].value;
 		}
+		//playerTotal += playerCards[0].value;
+		//dealerTotal += dealerCards[0].value;
+		//playerTotal += playerCards[1].value;
+		//dealerTotal += dealerCards[1].value;
 
-		console.log("PlayerTotal: "+playerTotal);
-		console.log("DealerTotal: "+dealerTotal);
+		// console.log("PlayerTotal: "+playerTotal);
+		// console.log("DealerTotal: "+dealerTotal);
 
 		comment.text(handValues());
 	}
@@ -180,30 +187,32 @@ function deal(num) {
 		playerCards.push(deck.shift());
 		playerTotal += playerCards[playerCards.length-1].value;
 		playerHand.append($('<img class="smallImg" src="'+ playerCards[playerCards.length-1].image +'">'));
+		if (playerTotal > 21) { 	//if over 21, check for aces
+			playerTotal = checkAce(playerCards, playerTotal);
+		}
 		comment.text(handValues());
-		
-		if (playerTotal > 21) {
-			checkAce(playerCards, playerTotal);
-		}
-		// player still over 21?
-		if (playerTotal > 21) {
-			debugger
+		if (playerTotal > 21) { 	// player is still over 21? end game
+			// console.log("player busted");
 			winner();
-			console.log("you busted");
 		}
-
 	}
 	if (num === 2) {
+
+		// replaces hold card src with actual index 1 card in dealerHand
+		dealerHand[0].lastChild.src = dealerCards[1].image;
+		// document.querySelector('.dealerHand').lastChild.src = '';
+		
 		// Dealer draws cards
 		var z = 2;
 		while (dealerTotal < 17) {
 			dealerCards.push(deck.shift());
 			dealerTotal += dealerCards[z].value;
 			dealerHand.append($('<img class="smallImg" src="'+ dealerCards[z].image +'">'));
-			console.log("Dealer Got: "+dealerCards[z].value);
+			// console.log("Dealer Got: "+dealerCards[z].value);
+			dealerTotal = checkAce(dealerCards, dealerTotal);
 			z++;
 		}
-		//console.log("Dealer has a total of: "+dealerTotal);
+		// console.log("Dealer has a total of: "+dealerTotal);
 
 		winner();
 		
@@ -222,10 +231,11 @@ function toggleButtons(bool) {
 // ONLY CALL WHEN PLAYER CAN'T HIT OR GET ANY MORE CARDS
 function winner() {  //checks for bust and compares hands
 	if (playerTotal > 21) {
-		comment.text("Dealer Wins");
+		comment.text("Player Bust");
+		dealerHand[0].lastChild.src = dealerCards[1].image;
 	}
 	else if (dealerTotal > 21) {
-		comment.text("You win: "+bet*2);
+		comment.text("Dealer Bust. You win: "+bet*2);
 		playerBank += bet*2;
 		bankOutput.text(playerBank);
 	}
@@ -256,15 +266,33 @@ function checkBJ() {
 		toggleButtons(true);
 	}
 }
-function checkAce(hand, total) {  //hand = playerHand or dealerHand
-	total = 0;
-	for (var i = 0; i < hand.length; i++) {
-		if (hand[i].rank === 1) {
-			hand[i].value = 1;
-		} 
-			total += hand[i].value;
+
+// checks for any aces and RETURNS ADJUSTED TOTAL when below 22
+function checkAce(hand, total) {  //hand = playerCards or dealerCards     //total = playerTotal or dealerTotal
+	//WHAT IF I HAD TWO ACES?  probably can use a for loop for this
+	
+	var i = 0;
+	while (total > 21) {  //while the playerTotal is greater than 21  //what if there are no aces? it never turns false
+		
+		if (hand[i].value === 11) {	 
+			hand[i].value = 1;	//decrease the ace value to 1
+			total -= 10; // manually adjust the playerTotal
+			// console.log("ace found");
+		}
+		i++;
+		if (i === hand.length) {	// if all cards are checked and no ace found, stop loop using return;
+			return total;
+		}
 	}
+	// console.log('new total'+total);
+	return total;	// return when total < 22
 }
+
+
+// outputs the total value of face up cards for each player
 function handValues() {
-	comment.text("Player: "+playerTotal+ "   Dealer: "+dealerTotal);
+	comment.text("Player: "+playerTotal+ "   Dealer: "+(dealerTotal-dealerCards[1].value));
 }
+
+
+
