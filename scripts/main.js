@@ -7,16 +7,20 @@ var betButton = $('.betButton');
 var hit = $('.hit');
 var stand = $('.stand');
 var dbl = $('.double');
+var split = $('.split');
 hit.prop('disabled',true);
 stand.prop('disabled',true);
 dbl.prop('disabled',true);
 betButton.prop('disabled',true);
 var playerTotal;
+var playerTotal2;
 var dealerTotal;
 var playerCards = [];
+var playerCards2 = []; //split hand
 var dealerCards = [];
 var dealerHand = $('.dealerHand'); //output of .png area
 var playerHand = $('.playerHand');
+var splitArea = $('.splitArea');
 var betAmt = $('.betAmt');
 var comment = $('.comment');
 var dealAreas = $('.dealArea');
@@ -25,6 +29,7 @@ var dealAreas = $('.dealArea');
 
 
 betButton.click(function() {
+
 	initState();  // 
 	// console.log("bet clicked");
 	bet = parseInt(betAmt.val());
@@ -37,6 +42,7 @@ betButton.click(function() {
 		bankOutput.text(playerBank);
 		deal(0); 
 		toggleButtons(false);
+		checkSplit();
 		checkBJ();
 	}
 	else {
@@ -47,8 +53,9 @@ betButton.click(function() {
 
 hit.click(function() {
 	// console.log("hit button clicked");
-	deal(1);
 	dbl.prop('disabled',true);
+	split.css('visibility','hidden');
+	deal(1);
 	
 });
 
@@ -82,20 +89,41 @@ stand.click(function() {
 	deal(2);
 })
 
+split.click(function() {
+	$('.playerHand img:last-child').remove()
+	split.css('visibility','hidden');
+	
+	playerCards2.push(playerCards.pop());
+	playerCards.push(deck.shift());
+	playerCards2.push(deck.shift());
+	
+	playerTotal = playerCards[0].value + playerCards[1].value;
+	playerTotal2 = playerCards2[0].value + playerCards2[1].value;
+	comment.text(handValues());
+
+	playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[1].image +'">'));
+	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[0].image +'">'));
+	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[1].image +'">'));
+
+});
+
 
 
 
 ///////////////////////////  FUNCTIONS
 function initState() {
 	dealAreas.empty();
+	$('.animated').removeClass('flash animated slideInRight faceInDown');
 	$('.deck').empty();
+	split.css('visibility','hidden')
 	playerCards = [];
+	playerCards2 = [];
 	dealerCards = [];
 	deck = [];
 	newDeck();
 	// shuffle();
 	comment.text('');
-	playerTotal = dealerTotal = 0;
+	playerTotal = playerTotal2 = dealerTotal = 0;
 	
 	// console.log("init ran");
 }
@@ -144,7 +172,7 @@ function newDeck() {
 
 	//shuffle the deck
 	for (var i = 0; i < deck.length; i++) {
-		var randomIndex = Math.floor(Math.random()*52);
+		var randomIndex = Math.floor(Math.random()*deck.length);
 		var moveThis = deck[randomIndex];
 		deck[randomIndex] = deck[i];
 		deck[i] = moveThis;
@@ -164,17 +192,17 @@ function deal(num) {
 	if (num === 0) {
 		// console.log("dealing...");
 		playerCards.push(deck.shift());
-		playerHand.append($('<img class="smallImg" src="'+ playerCards[0].image +'">'));
+		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[0].image +'">'));
 		
 		dealerCards.push(deck.shift());
-		dealerHand.append($('<img class="smallImg" src="'+ dealerCards[0].image +'">'));
+		dealerHand.append($('<img class="fadeInDown animated smallImg" src="'+ dealerCards[0].image +'">'));
 		
 		playerCards.push(deck.shift());
-		playerHand.append($('<img class="smallImg" src="'+ playerCards[1].image +'">'));
+		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[1].image +'">'));
 
 		//hole card
 		dealerCards.push(deck.shift());
-		dealerHand.append($('<img class="smallImg" src="deckimg/hole.png">')); // hole card img
+		dealerHand.append($('<img class="fadeInDown animated smallImg" src="deckimg/hole.png">')); // hole card img
 		
 		for (var t = 0; t < 2; t++) {
 			playerTotal += playerCards[t].value;
@@ -194,7 +222,7 @@ function deal(num) {
 	if (num === 1) {
 		playerCards.push(deck.shift());
 		playerTotal += playerCards[playerCards.length-1].value;
-		playerHand.append($('<img class="smallImg" src="'+ playerCards[playerCards.length-1].image +'">'));
+		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[playerCards.length-1].image +'">'));
 		if (playerTotal > 21) { 	//if over 21, check for aces
 			playerTotal = checkAce(playerCards, playerTotal);
 		}
@@ -202,6 +230,9 @@ function deal(num) {
 		if (playerTotal > 21) { 	// player is still over 21? end game
 			// console.log("player busted");
 			winner();
+		}
+		if ((playerCards.length === 5) && (playerTotal < 22)) {
+			deal(2);
 		}
 	}
 	if (num === 2) {
@@ -215,7 +246,7 @@ function deal(num) {
 		while (dealerTotal < 17) {
 			dealerCards.push(deck.shift());
 			dealerTotal += dealerCards[z].value;
-			dealerHand.append($('<img class="smallImg" src="'+ dealerCards[z].image +'">'));
+			dealerHand.append($('<img class="fadeInDown animated smallImg" src="'+ dealerCards[z].image +'">'));
 			// console.log("Dealer Got: "+dealerCards[z].value);
 			dealerTotal = checkAce(dealerCards, dealerTotal);
 			z++;
@@ -243,19 +274,23 @@ function winner() {  //checks for bust and compares hands
 	if (playerTotal > 21) {
 		comment.text("Player Bust");
 		dealerHand[0].lastChild.src = dealerCards[1].image;
+		dealerHand.addClass('flash animated');
 	}
 	else if (dealerTotal > 21) {
 		comment.text("Dealer Bust. You win: "+bet*2);
 		playerBank += bet*2;
 		bankOutput.text(playerBank);
+		playerHand.addClass('flash animated');
 	}
 	else if (playerTotal > dealerTotal) {
 		comment.text("You win: $"+bet*2);
 		playerBank += bet*2;
 		bankOutput.text(playerBank);
+		playerHand.addClass('flash animated');
 	}
 	else if (dealerTotal > playerTotal) {
 		comment.text("Dealer Wins");
+		dealerHand.addClass('flash animated');
 	}
 	else if (dealerTotal === playerTotal) {
 		comment.text("Push");
@@ -272,10 +307,21 @@ function winner() {  //checks for bust and compares hands
 }
 
 function checkBJ() {
-	if (playerTotal === 21) {
+	if ((playerTotal === 21) && (dealerTotal === 21)) {
+		dealerHand[0].lastChild.src = dealerCards[1].image;
+		winner();
+	}
+	else if (playerTotal === 21) {
 		comment.text("Blackjack! You win: $"+bet*2.5);
+		comment.addClass('slideInRight animated');
+		dealerHand[0].lastChild.src = dealerCards[1].image;
 		playerBank += bet*2.5;
 		bankOutput.text(playerBank);
+		toggleButtons(true);
+	}
+	else if (dealerTotal === 21) {
+		comment.text("Dealer won with Blackjack.");
+		dealerHand[0].lastChild.src = dealerCards[1].image;
 		toggleButtons(true);
 	}
 }
@@ -307,17 +353,7 @@ function handValues() {
 	comment.text("[Player: "+playerTotal+"]" + " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
 }
 
-
-// <div id="sitDown">
-//   <h1 id="howMuch">How much money do you have?</h2>
-//   <p class="doYouHave">Enter the amount of money you are bringing to the table.</p>
-//   <input class="submitBankAmt" placeholder="$"/>
-//   <button class="submitBankroll">Sit Down</button>
-//   <button class="closeModal">X</button>
-// </div>
-
-// $('#sitDown')
-
+/////////// Sit Down Modal
 $('.submitBankroll').click(function() {
 	if (parseInt($('.submitBankAmt').val()) > 0) {
 		initState();
@@ -334,3 +370,10 @@ function retry() {
 	$('#howMuch').text("You lost all your money");
 	$('.doYouHave').text("Would you like to play again?");
 }
+
+function checkSplit() {
+	if (playerCards[0].value === playerCards[1].value)
+		split.css('visibility', 'visible');
+}
+
+

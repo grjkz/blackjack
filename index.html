@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Blackjack by grjkz</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.3.0/animate.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css">
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 </head>
@@ -22,14 +23,17 @@
 		</div> -->
 	</div>
 
-	<div class='row'>
-		<div class='small-12 medium-10 small-centered columns dealArea dealerHand'>Dealer's Cards</div>
+	<div class='row largeRow'>
+		<div class='small-12 columns dealArea dealerHand'>Dealer's Cards</div>
 	</div>
-	<div class='row'>
-		<div class='small-12 medium-10 small-centered columns comment'>Comments Area</div>
+	<div class='row largeRow'>
+		<div class='small-12 small-centered columns comment'>Comments Area</div>
 	</div>
-	<div class='row'>	
-		<div class='small-12 medium-10 small-centered columns dealArea playerHand'>Player's Cards</div>
+	<div class='row largeRow'>	
+		<div class='small-6 columns dealArea playerHand'>Player's Cards
+		</div>
+			<div class="dealArea splitArea">Split Area
+			</div>
 	</div>
 
 
@@ -49,15 +53,17 @@
 
 <div class="row">
 	<div class="small-10 small-push-2 columns actions">
-		
 		<div class="small-3 columns">
-			<button class='hit'>HIT</button>
+			<button class='hit'>Hit</button>
 		</div>
 		<div class="small-3 columns">
-			<button class='stand'>STAND</button>
+			<button class='stand'>Stand</button>
 		</div>
-		<div class="small-3 end columns">
+		<div class="small-3 columns">
 			<button class='double'>Double</button>
+		</div>
+		<div class="small-3 columns">
+			<button class='split'>Split</button>
 		</div>
 	</div>
 </div>

@@ -12,7 +12,11 @@ body {
 }
 
 .hit,.stand,.double {
-	margin: 30%;
+	margin: 10%;
+}
+.split {
+	margin: 10%;
+	visibility: hidden;
 }
 .dealer {
 /*	text-align: left;
@@ -41,6 +45,13 @@ body {
 .dealArea {
 	height: 150px;
 	border: solid 1px white;
+	display; inline-block;
+}
+
+.largeRow {
+	max-width: initial;
+	width: 81%;
+
 }
 
 .comment {
