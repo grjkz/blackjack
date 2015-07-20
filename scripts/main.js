@@ -47,6 +47,7 @@ betButton.click(function() {
 hit.click(function() {
 	// console.log("hit button clicked");
 	deal(1);
+	dbl.prop('disabled',true);
 	
 });
 
@@ -291,7 +292,7 @@ function checkAce(hand, total) {  //hand = playerCards or dealerCards     //tota
 
 // outputs the total value of face up cards for each player
 function handValues() {
-	comment.text("Player: "+playerTotal+ "   Dealer: "+(dealerTotal-dealerCards[1].value));
+	comment.text("[Player: "+playerTotal+"]" + " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
 }
 
 

@@ -1,21 +1,28 @@
-* {
+/** {
 	border: black solid 2px;
-}
+}*/
 
 body {
-	text-align: center;
-	width: 1300px;
-	height: 600px;
+/*	text-align: center;*/
+/*	width: 1300px;*/
+	min-width: 855px;
+	/*height: 600px;*/
+	background-image: url("../img/table.jpg");
 
 }
+
+.hit,.stand,.double {
+	margin: 30%;
+}
 .dealer {
-	text-align: left;
+/*	text-align: left;
 	display: inline-block;
-	position: relative;
+	position: relative;*/
 	
 }
 .dealer img {
 	width: 70px;
+	margin-bottom: 1%;
 }
 
 /*.dealer-info {
@@ -32,36 +39,32 @@ body {
 }*/
 
 .dealArea {
-	width: 100%;
-	height: 200px;
+	height: 150px;
+	border: solid 1px white;
 }
 
 .comment {
 	padding: 5px;
-	height: 50px;
-	color: red;
+/*	height: 50px;*/
+	color: yellow;
 	font-size: 1.5em;
 
 }
 
-.bet {
-	display: inline-block;
-/*	text-align: right;  use this if you remove float from .betButton*/
-}
-
 .bank, .bankWord {
-	float: left;
+/*	float: left;*/
 	margin-top: 5px;
 	margin-right: 10px;
+	color: orange;
 
 }
 .betButton, .betAmt {
-	float:right;
+/*	float:right;*/
 }
 
 .smallImg {
 	position: relative;
-	height: 120px;
+	max-height: 85%;
 	margin: 10px;
 }
 

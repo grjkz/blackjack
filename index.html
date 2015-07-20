@@ -4,13 +4,12 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Blackjack by grjkz</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css">
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 
 
-<body>
+<body class='small-12 columns'>
 	<h1>BLACKJACK</h1>
 
 	<div class='dealer'>
@@ -23,30 +22,65 @@
 		</div> -->
 	</div>
 
-
-	<div class='dealArea dealerHand'>Dealer's Cards Here</div>
-	<div class='comment'>Comments Area</div>
-	<div class='dealArea playerHand'>Player's Cards<br>
-		
+	<div class='row'>
+		<div class='small-12 medium-10 small-centered columns dealArea dealerHand'>Dealer's Cards</div>
+	</div>
+	<div class='row'>
+		<div class='small-12 medium-10 small-centered columns comment'>Comments Area</div>
+	</div>
+	<div class='row'>	
+		<div class='small-12 medium-10 small-centered columns dealArea playerHand'>Player's Cards</div>
 	</div>
 
-	<div class='row actions'>
-		<div class='one-third column bet'>
-			<p class='bankWord'>Bank:</p>
-			<p class='bank'>1000</p>
-			<button class='betButton'>Bet</button>
-			<input class='betAmt' type="text" placeholder='Bet Amount'/>
-		</div>
-		<div class='two-thirds column actions'>
+
+<!-- 	<div class='row actions'>
+		
+		<p class='small-2 medium-4 columns bankWord'>Bank:</p>
+		<p class='bank'>1000</p>
+			
+		
+		<div class='actions'>
 			<button class='hit'>HIT</button>
 			<button class='stand'>STAND</button>
 			<button class='double'>Double</button>
+		</div>
+	</div> -->
+
+
+<div class="row">
+	<div class="small-8 small-push-2 columns actions">
+		
+		<div class="small-3 columns">
+			<button class='hit'>HIT</button>
+		</div>
+		<div class="small-3 columns">
+			<button class='stand'>STAND</button>
+		</div>
+		<div class="small-3 end columns">
+			<button class='double'>Double</button>
+		</div>
 	</div>
 </div>
-<div class="deck"></div>
-	
+
+
+<div class="row">
+	<p class='small-1 column bankWord'>Bank:</p>
+	<p class='bank'>1000</p>
+    <div class="small-5 columns">
+      <div class="row collapse prefix-radius">
+        <div class="small-3 columns">
+         <button class='prefix betButton'>Bet</button>
+        </div>
+        <div class="small-2 end columns">
+          <input class='small-1 medium-1 columns betAmt' type="text" placeholder='$$$'/>
+        </div>
+      </div>
+    </div>
+</div>
+
 </body>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="scripts/main.js"></script>
 
 </html>
