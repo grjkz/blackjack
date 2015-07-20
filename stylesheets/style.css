@@ -71,3 +71,37 @@ body {
 .playerHand {
 
 }
+
+#sitDown {
+	text-align: center;
+	position: absolute;
+	display:inline;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,.5);
+}
+
+.sitDownContent {
+	background-image: url("http://previews.123rf.com/images/schan/schan1111/schan111100204/11499989-granite-background-seamless-repeat-pattern--Stock-Photo.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: absolute;
+	width: 50%;
+	background-color: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+}
+
+.submitBankAmt {
+	margin-top: 5%;
+	font-size: 2em;
+}
+
+#howMuch, .doYouHave {
+	color: lime;
+}

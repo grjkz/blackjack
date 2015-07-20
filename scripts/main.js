@@ -1,6 +1,6 @@
 // console.log("linked");
 var deck = [];
-var playerBank = 1000;
+var playerBank = 0;
 var bankOutput = $('.bank');
 var bet = 0;
 var betButton = $('.betButton');
@@ -10,6 +10,7 @@ var dbl = $('.double');
 hit.prop('disabled',true);
 stand.prop('disabled',true);
 dbl.prop('disabled',true);
+betButton.prop('disabled',true);
 var playerTotal;
 var dealerTotal;
 var playerCards = [];
@@ -53,20 +54,25 @@ hit.click(function() {
 
 dbl.click(function() {
 	// console.log("double button clicked");
-	playerBank -= bet;
-	bet *=2;
-	bankOutput.text(playerBank);
-	deal(1);
-	if (playerTotal < 22) { // player is still good with aces
-		deal(2);
+	if (bet > playerBank) {
+		comment.text("You don't have enough money");
 	}
-	else { // over 21: check for aces
-		playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
-		if (playerTotal < 22) {  //if player is still less than 22
+	else {
+		playerBank -= bet;
+		bet *=2;
+		bankOutput.text(playerBank);
+		deal(1);
+		if (playerTotal < 22) { // player is still good with aces
 			deal(2);
 		}
-		else {					//player busted
-			winner();
+		else { // over 21: check for aces
+			playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
+			if (playerTotal < 22) {  //if player is still less than 22
+				deal(2);
+			}
+			else {					//player busted
+				winner();
+			}
 		}
 	}
 })
@@ -90,6 +96,7 @@ function initState() {
 	// shuffle();
 	comment.text('');
 	playerTotal = dealerTotal = 0;
+	
 	// console.log("init ran");
 }
 
@@ -223,10 +230,12 @@ function deal(num) {
 
 // deactivate bet button and activate others
 function toggleButtons(bool) {
-	hit.prop('disabled',bool);
-	stand.prop('disabled',bool);
-	dbl.prop('disabled',bool);
-	betButton.prop('disabled',!bool);
+
+		hit.prop('disabled',bool);
+		stand.prop('disabled',bool);
+		dbl.prop('disabled',bool);
+		betButton.prop('disabled',!bool);
+	
 }
 
 // ONLY CALL WHEN PLAYER CAN'T HIT OR GET ANY MORE CARDS
@@ -257,6 +266,9 @@ function winner() {  //checks for bust and compares hands
 		handValues();
 	}
 	toggleButtons(true);
+	if (playerBank <= 0) {
+		retry();
+	}
 }
 
 function checkBJ() {
@@ -296,4 +308,29 @@ function handValues() {
 }
 
 
+// <div id="sitDown">
+//   <h1 id="howMuch">How much money do you have?</h2>
+//   <p class="doYouHave">Enter the amount of money you are bringing to the table.</p>
+//   <input class="submitBankAmt" placeholder="$"/>
+//   <button class="submitBankroll">Sit Down</button>
+//   <button class="closeModal">X</button>
+// </div>
 
+// $('#sitDown')
+
+$('.submitBankroll').click(function() {
+	if (parseInt($('.submitBankAmt').val()) > 0) {
+		initState();
+		playerBank = parseInt($('.submitBankAmt').val());
+		bankOutput.text(playerBank);
+		//close modal
+		$('#sitDown').toggle();
+		betButton.prop('disabled',false);
+	}
+});
+
+function retry() {
+	$('#sitDown').toggle();
+	$('#howMuch').text("You lost all your money");
+	$('.doYouHave').text("Would you like to play again?");
+}
