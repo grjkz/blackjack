@@ -116,3 +116,7 @@ body {
 #howMuch, .doYouHave {
 	color: lime;
 }
+
+.red {
+	border: solid 3px red;
+}

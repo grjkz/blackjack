@@ -3,6 +3,7 @@ var deck = [];
 var playerBank = 0;
 var bankOutput = $('.bank');
 var bet = 0;
+var sBet = 0;
 var betButton = $('.betButton');
 var hit = $('.hit');
 var stand = $('.stand');
@@ -20,17 +21,18 @@ var playerCards2 = []; //split hand
 var dealerCards = [];
 var dealerHand = $('.dealerHand'); //output of .png area
 var playerHand = $('.playerHand');
+var playerHand2 = $('.splitArea');
 var splitArea = $('.splitArea');
 var betAmt = $('.betAmt');
 var comment = $('.comment');
 var dealAreas = $('.dealArea');
+var splitTurn = false;
 //initState();
 /////////////////	INITIAL STUFF
 
 
 betButton.click(function() {
-
-	initState();  // 
+	initState();
 	// console.log("bet clicked");
 	bet = parseInt(betAmt.val());
 	if (bet > playerBank) {
@@ -53,10 +55,56 @@ betButton.click(function() {
 
 hit.click(function() {
 	// console.log("hit button clicked");
-	dbl.prop('disabled',true);
 	split.css('visibility','hidden');
-	deal(1);
 	
+	if (!playerTotal2) {		//no split
+		dbl.prop('disabled',true);
+		deal(1);
+		if (playerTotal > 21) { 	//if over 21, check for aces
+			playerTotal = checkAce(playerCards, playerTotal);
+		}
+		comment.text(handValues());
+		if (playerTotal > 21) { 	// player is still over 21? end game
+			// console.log("player busted");
+			winner();
+		}
+		if ((playerCards.length === 5) && (playerTotal < 22)) {
+			deal(2);
+		}
+	}
+
+	else {		//split exists
+		if (!splitTurn) {
+			deal(1);
+			if (playerTotal > 21) { 	//if over 21, check for aces
+				playerTotal = checkAce(playerCards, playerTotal);
+			}
+			comment.text(handValues());
+			if (playerTotal > 21) { 	// player is still over 21? end game
+				// console.log("player busted");
+				splitTurn = true;
+				playAreaHighlight();
+			}
+			if ((playerCards.length === 5) && (playerTotal < 22)) {
+				splitTurn = true;
+				playAreaHighlight();
+			}
+		}
+		else {
+			deal(3);
+			if (playerTotal2 > 21) { 	//if over 21, check for aces
+				playerTotal2 = checkAce(playerCards2, playerTotal2);
+			}
+			comment.text(handValues());
+			if (playerTotal2 > 21) { 	// player is still over 21? end game
+				// console.log("player busted");
+				winner();
+			}
+			if ((playerCards2.length === 5) && (playerTotal2 < 22)) {
+				deal(2);
+			}
+		}
+	}
 });
 
 dbl.click(function() {
@@ -65,20 +113,55 @@ dbl.click(function() {
 		comment.text("You don't have enough money");
 	}
 	else {
-		playerBank -= bet;
-		bet *=2;
-		bankOutput.text(playerBank);
-		deal(1);
-		if (playerTotal < 22) { // player is still good with aces
-			deal(2);
+		split.css('visibility','hidden');
+		if (!playerTotal2) {		//no split hand
+			playerBank -= bet;
+			bet *=2;
+			bankOutput.text(playerBank);
+			deal(1);
+			if (playerTotal > 21) {
+					playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
+				}
+			if (playerTotal > 21) {
+					winner();
+				}
+			else { // player is still good with aces
+					deal(2);
+				}
 		}
-		else { // over 21: check for aces
-			playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
-			if (playerTotal < 22) {  //if player is still less than 22
-				deal(2);
+		else {		//split exists
+			if (!splitTurn) {		//left field
+				playerBank -= bet;
+				bet *=2;
+				bankOutput.text(playerBank);
+				deal(1);
+				if (playerTotal > 22) {
+					playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
+				}
+				splitTurn = true;
+				playAreaHighlight();
+				comment.text(handValues());
 			}
-			else {					//player busted
-				winner();
+
+			else {					//right field
+				if (bet > playerBank) {
+					comment.text("You don't have enough money");
+				}
+				else {
+					playerBank -= sBet;
+					sBet *=2;
+					bankOutput.text(playerBank);
+					deal(3);
+					if (playerTotal2 > 21) {
+						playerTotal2 = checkAce(playerCards2, playerTotal2);	//update playerTotal						
+					}
+					if (playerTotal2 > 21) {
+						deal(2);
+					}
+					else {
+						deal(2);
+					}
+				}
 			}
 		}
 	}
@@ -86,13 +169,29 @@ dbl.click(function() {
 
 stand.click(function() {
 	// console.log("stand button clicked");
-	deal(2);
+	split.css('visibility','hidden');
+	if (!playerTotal2) {		//no split
+			deal(2);
+		}
+
+	else {		//split exists
+		if (!splitTurn) {
+			splitTurn = true;
+			playAreaHighlight();
+		}
+		else {
+			deal(2);
+		}
+	}
 })
 
 split.click(function() {
-	$('.playerHand img:last-child').remove()
 	split.css('visibility','hidden');
-	
+	$('.playerHand img:last-child').remove()
+	sBet = bet;
+	playerBank -= sBet;
+	bankOutput.text(playerBank);
+
 	playerCards2.push(playerCards.pop());
 	playerCards.push(deck.shift());
 	playerCards2.push(deck.shift());
@@ -105,6 +204,7 @@ split.click(function() {
 	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[0].image +'">'));
 	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[1].image +'">'));
 
+	playAreaHighlight();
 });
 
 
@@ -116,6 +216,8 @@ function initState() {
 	$('.animated').removeClass('flash animated slideInRight faceInDown');
 	$('.deck').empty();
 	split.css('visibility','hidden')
+	splitTurn = false;
+	playerHand2.removeClass('red');
 	playerCards = [];
 	playerCards2 = [];
 	dealerCards = [];
@@ -123,6 +225,7 @@ function initState() {
 	newDeck();
 	// shuffle();
 	comment.text('');
+	bet = sBet = 0;
 	playerTotal = playerTotal2 = dealerTotal = 0;
 	
 	// console.log("init ran");
@@ -223,20 +326,9 @@ function deal(num) {
 		playerCards.push(deck.shift());
 		playerTotal += playerCards[playerCards.length-1].value;
 		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[playerCards.length-1].image +'">'));
-		if (playerTotal > 21) { 	//if over 21, check for aces
-			playerTotal = checkAce(playerCards, playerTotal);
-		}
 		comment.text(handValues());
-		if (playerTotal > 21) { 	// player is still over 21? end game
-			// console.log("player busted");
-			winner();
-		}
-		if ((playerCards.length === 5) && (playerTotal < 22)) {
-			deal(2);
-		}
 	}
 	if (num === 2) {
-
 		// replaces hold card src with actual index 1 card in dealerHand
 		dealerHand[0].lastChild.src = dealerCards[1].image;
 		// document.querySelector('.dealerHand').lastChild.src = '';
@@ -248,13 +340,18 @@ function deal(num) {
 			dealerTotal += dealerCards[z].value;
 			dealerHand.append($('<img class="fadeInDown animated smallImg" src="'+ dealerCards[z].image +'">'));
 			// console.log("Dealer Got: "+dealerCards[z].value);
-			dealerTotal = checkAce(dealerCards, dealerTotal);
+			if (dealerTotal > 21) {
+				dealerTotal = checkAce(dealerCards, dealerTotal);
+			}
 			z++;
 		}
 		// console.log("Dealer has a total of: "+dealerTotal);
-
 		winner();
-		
+	}
+	if (num === 3) {
+		playerCards2.push(deck.shift());
+		playerTotal2 += playerCards2[playerCards2.length-1].value;
+		playerHand2.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[playerCards2.length-1].image +'">'));
 	}
 }
 
@@ -298,7 +395,44 @@ function winner() {  //checks for bust and compares hands
 		bankOutput.text(playerBank);
 	}
 	else {
-		handValues();
+		comment.text("Error?");
+	}
+
+
+	if (playerTotal2) {		//calculate for split hand
+		if (playerTotal2 > 21) {
+			console.log("split bust");
+			//comment.text("Player Bust");
+			dealerHand[0].lastChild.src = dealerCards[1].image;
+			dealerHand.addClass('flash animated');
+		}
+		else if (dealerTotal > 21) {
+			console.log("split win");
+			comment.text("Dealer Bust. You win: "+sBet*2);
+			playerBank += sBet*2;
+			bankOutput.text(playerBank);
+			playerHand2.addClass('flash animated');
+		}
+		else if (playerTotal2 > dealerTotal) {
+			console.log("split win");
+			comment.text("You win: $"+sBet*2);
+			playerBank += sBet*2;
+			bankOutput.text(playerBank);
+			playerHand2.addClass('flash animated');
+		}
+		else if (dealerTotal > playerTotal2) {
+			comment.text("Dealer Wins");
+			dealerHand.addClass('flash animated');
+		}
+		else if (dealerTotal === playerTotal2) {
+			comment.text("Push");
+			playerBank += sBet;
+			bankOutput.text(playerBank);
+		}
+		else {
+			comment.text("Error?");
+		}
+		comment.text("[Player: "+playerTotal+"]" + " [Split Hand: "+playerTotal2+"]"+ " [Dealer: "+dealerTotal+"]");
 	}
 	toggleButtons(true);
 	if (playerBank <= 0) {
@@ -347,12 +481,32 @@ function checkAce(hand, total) {  //hand = playerCards or dealerCards     //tota
 	return total;	// return when total < 22
 }
 
+function checkSplit() {
+	if (playerCards[0].value === playerCards[1].value && playerBank >= bet) {
+		split.css('visibility', 'visible');
+	}
+}
+
 
 // outputs the total value of face up cards for each player
 function handValues() {
-	comment.text("[Player: "+playerTotal+"]" + " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
+	if (playerTotal2) {
+		comment.text("[Player: "+playerTotal+"]" + " [Split Hand: "+playerTotal2+"]"+ " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
+	}
+	else {
+		comment.text("[Player: "+playerTotal+"]" + " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
+	}	
 }
 
+function playAreaHighlight() {
+	if (!splitTurn) {
+		playerHand.addClass('red');
+	}
+	else {
+		playerHand.removeClass('red');
+		playerHand2.addClass('red');
+	}
+}
 /////////// Sit Down Modal
 $('.submitBankroll').click(function() {
 	if (parseInt($('.submitBankAmt').val()) > 0) {
@@ -371,9 +525,5 @@ function retry() {
 	$('.doYouHave').text("Would you like to play again?");
 }
 
-function checkSplit() {
-	if (playerCards[0].value === playerCards[1].value)
-		split.css('visibility', 'visible');
-}
 
 
