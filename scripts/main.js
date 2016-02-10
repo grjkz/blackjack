@@ -1,4 +1,3 @@
-// console.log("linked");
 var deck = [];
 var playerBank = 0;
 var bankOutput = $('.bank');
@@ -27,8 +26,40 @@ var betAmt = $('.betAmt');
 var comment = $('.comment');
 var dealAreas = $('.dealArea');
 var splitTurn = false;
-//initState();
+
 /////////////////	INITIAL STUFF
+
+/**
+ * Load old save if exists
+ * @param  {[type]} typeof(Storage) !             [description]
+ * @return {[type]}                 [description]
+ */
+if (typeof(Storage) !== 'undefined') {
+	if (!Number(localStorage.grjkz_blackjack_bank)) {
+		$('#sitDown').toggle();
+	}
+	else {
+		startGame(Number(localStorage.grjkz_blackjack_bank));
+	}
+
+}
+else {
+	$('#sitDown').toggle();
+}
+
+
+/**
+ * Buy-in button handler
+ */
+$('.submitBankroll').click(function() {
+	if (parseInt($('.submitBankAmt').val()) > 0) {
+		
+		playerBank = startGame(parseInt($('.submitBankAmt').val()));
+		//close modal
+		$('#sitDown').toggle();
+	}
+});
+
 
 /**
  * Bet button handler
@@ -242,7 +273,7 @@ function initState() {
 	playerTotal2 = 0;
 	dealerTotal = 0;
 	
-	// console.log("init ran");
+	console.log("init ran");
 }
 
 
@@ -467,6 +498,12 @@ function winner() {  //checks for bust and compares hands
 		comment.text("[Player: "+playerTotal+"]" + " [Split Hand: "+playerTotal2+"]"+ " [Dealer: "+dealerTotal+"]");
 	}
 	toggleButtons(true);
+	
+	// save bank to local storage
+	if (typeof(Storage) !== 'undefined') {
+	localStorage.grjkz_blackjack_bank = playerBank;
+	}
+
 	if (playerBank <= 0) {
 		retry();
 	}
@@ -553,18 +590,14 @@ function playAreaHighlight() {
 
 
 /**
- * Buy-in Modal
+ * Start game
  */
-$('.submitBankroll').click(function() {
-	if (parseInt($('.submitBankAmt').val()) > 0) {
-		initState();
-		playerBank = parseInt($('.submitBankAmt').val());
-		bankOutput.text(playerBank);
-		//close modal
-		$('#sitDown').toggle();
-		betButton.prop('disabled',false);
-	}
-});
+function startGame(cash) {
+	initState();
+	playerBank = cash;
+	bankOutput.text(playerBank);
+	betButton.prop('disabled',false);
+}
 
 
 /**
