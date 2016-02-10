@@ -19,7 +19,7 @@ var dealerTotal;
 var playerCards = [];
 var playerCards2 = []; //split hand
 var dealerCards = [];
-var dealerHand = $('.dealerHand'); //output of .png area
+var dealerHand = $('.dealerHand'); //output of .png area || DOM
 var playerHand = $('.playerHand');
 var playerHand2 = $('.splitArea');
 var splitArea = $('.splitArea');
@@ -30,10 +30,11 @@ var splitTurn = false;
 //initState();
 /////////////////	INITIAL STUFF
 
-
+/**
+ * Bet button handler
+ */
 betButton.click(function() {
 	initState();
-	// console.log("bet clicked");
 	bet = parseInt(betAmt.val());
 	if (bet > playerBank) {
 		comment.text("You don't have that much money.");
@@ -50,22 +51,20 @@ betButton.click(function() {
 	else {
 		comment.text("Please enter a valid bet.");
 	}
-})
+});
 
 
 hit.click(function() {
-	// console.log("hit button clicked");
 	split.css('visibility','hidden');
 	
 	if (!playerTotal2) {		//no split
 		dbl.prop('disabled',true);
 		deal(1);
-		if (playerTotal > 21) { 	//if over 21, check for aces
+		if (playerTotal > 21) { 	// if over 21, check for aces
 			playerTotal = checkAce(playerCards, playerTotal);
 		}
 		comment.text(handValues());
 		if (playerTotal > 21) { 	// player is still over 21? end game
-			// console.log("player busted");
 			winner();
 		}
 		if ((playerCards.length === 5) && (playerTotal < 22)) {
@@ -107,6 +106,9 @@ hit.click(function() {
 	}
 });
 
+/**
+ * Double Down handler
+ */
 dbl.click(function() {
 	// console.log("double button clicked");
 	if (bet > playerBank) {
@@ -114,7 +116,9 @@ dbl.click(function() {
 	}
 	else {
 		split.css('visibility','hidden');
-		if (!playerTotal2) {		//no split hand
+		
+		//no split hand
+		if (!playerTotal2) {
 			playerBank -= bet;
 			bet *=2;
 			bankOutput.text(playerBank);
@@ -129,13 +133,15 @@ dbl.click(function() {
 					deal(2);
 				}
 		}
-		else {		//split exists
-			if (!splitTurn) {		//left field
+
+		//split exists
+		else {
+			if (!splitTurn) {		// original hand's turn
 				playerBank -= bet;
 				bet *=2;
 				bankOutput.text(playerBank);
 				deal(1);
-				if (playerTotal > 22) {
+				if (playerTotal > 21) {
 					playerTotal = checkAce(playerCards, playerTotal);	//update playerTotal
 				}
 				splitTurn = true;
@@ -143,7 +149,7 @@ dbl.click(function() {
 				comment.text(handValues());
 			}
 
-			else {					//right field
+			else {					// split hand's turn
 				if (bet > playerBank) {
 					comment.text("You don't have enough money");
 				}
@@ -167,6 +173,9 @@ dbl.click(function() {
 	}
 });
 
+/**
+ * Stand handler
+ */
 stand.click(function() {
 	// console.log("stand button clicked");
 	split.css('visibility','hidden');
@@ -183,23 +192,26 @@ stand.click(function() {
 			deal(2);
 		}
 	}
-})
+});
 
+/**
+ * Split handler
+ */
 split.click(function() {
 	split.css('visibility','hidden');
-	$('.playerHand img:last-child').remove()
+	$('.playerHand img:last-child').remove();
 	sBet = bet;
 	playerBank -= sBet;
 	bankOutput.text(playerBank);
-
+	// update hands
 	playerCards2.push(playerCards.pop());
 	playerCards.push(deck.shift());
 	playerCards2.push(deck.shift());
-	
+	// update hand values
 	playerTotal = playerCards[0].value + playerCards[1].value;
 	playerTotal2 = playerCards2[0].value + playerCards2[1].value;
 	comment.text(handValues());
-
+	// update hand images
 	playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[1].image +'">'));
 	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[0].image +'">'));
 	splitArea.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards2[1].image +'">'));
@@ -215,7 +227,7 @@ function initState() {
 	dealAreas.empty();
 	$('.animated').removeClass('flash animated slideInRight faceInDown');
 	$('.deck').empty();
-	split.css('visibility','hidden')
+	split.css('visibility','hidden');
 	splitTurn = false;
 	playerHand2.removeClass('red');
 	playerCards = [];
@@ -223,10 +235,12 @@ function initState() {
 	dealerCards = [];
 	deck = [];
 	newDeck();
-	// shuffle();
-	comment.text('');
-	bet = sBet = 0;
-	playerTotal = playerTotal2 = dealerTotal = 0;
+	comment.text('Place your bet');
+	bet = 0;
+	sBet = 0;
+	playerTotal = 0;
+	playerTotal2 = 0;
+	dealerTotal = 0;
 	
 	// console.log("init ran");
 }
@@ -360,6 +374,10 @@ function deal(num) {
 		// console.log("Dealer has a total of: "+dealerTotal);
 		winner();
 	}
+
+	/*
+	Deal to player's split hand
+	 */
 	if (num === 3) {
 		playerCards2.push(deck.shift());
 		playerTotal2 += playerCards2[playerCards2.length-1].value;
@@ -368,7 +386,9 @@ function deal(num) {
 }
 
 
-// deactivate bet button and activate others
+/**
+ * Deactivate bet button and activate others
+ */
 function toggleButtons(bool) {
 
 		hit.prop('disabled',bool);
@@ -377,8 +397,10 @@ function toggleButtons(bool) {
 		betButton.prop('disabled',!bool);
 	
 }
-
-// ONLY CALL WHEN PLAYER CAN'T HIT OR GET ANY MORE CARDS
+/**
+ * Determine's the winner
+ * Called when when player can't hit or has maximum # of cards
+ */
 function winner() {  //checks for bust and compares hands
 	if (playerTotal > 21) {
 		comment.text("Player Bust");
@@ -386,7 +408,7 @@ function winner() {  //checks for bust and compares hands
 		dealerHand.addClass('flash animated');
 	}
 	else if (dealerTotal > 21) {
-		comment.text("Dealer Bust. You win: "+bet*2);
+		comment.text("Dealer Bust. You win: $"+bet*2);
 		playerBank += bet*2;
 		bankOutput.text(playerBank);
 		playerHand.addClass('flash animated');
@@ -413,25 +435,23 @@ function winner() {  //checks for bust and compares hands
 
 	if (playerTotal2) {		//calculate for split hand
 		if (playerTotal2 > 21) {
-			console.log("split bust");
-			//comment.text("Player Bust");
+			// console.log("split bust");
+			comment.text("Player Bust");
 			dealerHand[0].lastChild.src = dealerCards[1].image;
 			dealerHand.addClass('flash animated');
 		}
-		else if (dealerTotal > 21) {
-			console.log("split win");
-			comment.text("Dealer Bust. You win: "+sBet*2);
+		else if (dealerTotal > 21 || playerTotal2 > dealerTotal) {
+			if (playerTotal2 > dealerTotal) {
+				comment.text("You win: $"+sBet*2);	
+			}
+			else {
+				comment.text("Dealer Bust. You win: "+sBet*2);
+			}
 			playerBank += sBet*2;
 			bankOutput.text(playerBank);
 			playerHand2.addClass('flash animated');
 		}
-		else if (playerTotal2 > dealerTotal) {
-			console.log("split win");
-			comment.text("You win: $"+sBet*2);
-			playerBank += sBet*2;
-			bankOutput.text(playerBank);
-			playerHand2.addClass('flash animated');
-		}
+		
 		else if (dealerTotal > playerTotal2) {
 			comment.text("Dealer Wins");
 			dealerHand.addClass('flash animated');
@@ -472,27 +492,32 @@ function checkBJ() {
 	}
 }
 
-// checks for any aces and RETURNS ADJUSTED TOTAL when below 22
-function checkAce(hand, total) {  //hand = playerCards or dealerCards     //total = playerTotal or dealerTotal
+/**
+ * checks for any aces and RETURNS ADJUSTED TOTAL when below 22
+ * @param  {array} hand  player or computer's target hand
+ * @param  {int} total current hand value total
+ */
+function checkAce(hand, total) {
 	//WHAT IF I HAD TWO ACES?  probably can use a for loop for this
 	
-	var i = 0;
-	while (total > 21) {  //while the playerTotal is greater than 21  //what if there are no aces? it never turns false
-		
-		if (hand[i].value === 11) {	 
-			hand[i].value = 1;	//decrease the ace value to 1
+	for (var i = 0; i < hand.length; i++) {
+		if (hand[i].value === 11) { // if ace found
+			hand[i].value = 1;	// decrease the ace value to 1
 			total -= 10; // manually adjust the playerTotal
-			// console.log("ace found");
 		}
-		i++;
-		if (i === hand.length) {	// if all cards are checked and no ace found, stop loop using return;
-			return total;
-		}
+
+		if (total < 22) {
+			return total; // didn't bust
+		}	
 	}
-	// console.log('new total'+total);
-	return total;	// return when total < 22
+
+	return total;	// busted
 }
 
+
+/**
+ * Enables split button if requirements met
+ */
 function checkSplit() {
 	if (playerCards[0].value === playerCards[1].value && playerBank >= bet) {
 		split.css('visibility', 'visible');
@@ -500,7 +525,9 @@ function checkSplit() {
 }
 
 
-// outputs the total value of face up cards for each player
+/**
+ * Outputs the total value of face up cards for each player
+ */
 function handValues() {
 	if (playerTotal2) {
 		comment.text("[Player: "+playerTotal+"]" + " [Split Hand: "+playerTotal2+"]"+ " [Dealer: "+(dealerTotal-dealerCards[1].value)+"]");
@@ -510,6 +537,10 @@ function handValues() {
 	}	
 }
 
+
+/**
+ * Highlights a hand's turn
+ */
 function playAreaHighlight() {
 	if (!splitTurn) {
 		playerHand.addClass('red');
@@ -519,7 +550,11 @@ function playAreaHighlight() {
 		playerHand2.addClass('red');
 	}
 }
-/////////// Sit Down Modal
+
+
+/**
+ * Buy-in Modal
+ */
 $('.submitBankroll').click(function() {
 	if (parseInt($('.submitBankAmt').val()) > 0) {
 		initState();
@@ -531,11 +566,12 @@ $('.submitBankroll').click(function() {
 	}
 });
 
+
+/**
+ * Show buy-in Modal
+ * */
 function retry() {
 	$('#sitDown').toggle();
 	$('#howMuch').text("You lost all your money");
 	$('.doYouHave').text("Would you like to play again?");
 }
-
-
-
