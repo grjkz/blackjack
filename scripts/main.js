@@ -165,7 +165,7 @@ dbl.click(function() {
 			}
 		}
 	}
-})
+});
 
 stand.click(function() {
 	// console.log("stand button clicked");
@@ -232,43 +232,48 @@ function initState() {
 }
 
 
-
-
+/**
+ * Creates a new in-order deck
+ * @return {null} NULL
+ */
 function newDeck() {
 	// push each card into deck[]
 	for (var i = 0; i < 4; i++) {
 	    for (var j = 0; j < 13; j++) {
-		// image: value info
-		// if 3 digits, last 2 values = card rank + 1
-		// if 2 digits, first value = suit and last value = rank
-		// 010.png = diamond 11
-		// 01.png = diamond 2
-		// remember that card 00 is diamond ACE and +13 is club ACE
-		if (j === 0) {
-			var card = {
-		    	rank: j+1, 
-		    	suit: i+1,
-				value: 11,
-				image: "deckimg/"+ i.toString()+j.toString() +".png"
-			}
-		}
-		else if (j >= 10) {
-			var card = {
-		    	rank: j+1, 
-		    	suit: i+1,
-				value: 10,
-				image: "deckimg/"+ i.toString()+j.toString() +".png"
-			};
-		}
-	   	else {
-	   		var card = {
-		    	rank: j+1, 
-		    	suit: i+1,
-				value: j+1,
-				image: "deckimg/"+ i.toString()+j.toString() +".png"
-			};
-		}
-	    deck.push(card);  //puts newly created card(assoArray) into the deck array
+				// image info
+				// first digit is the suit. following digit(s) = rank/value
+				// 010.png = diamond Jack
+				// 01.png = diamond 2
+				// 20.png = heart A
+				
+				var img = i.toString()+j.toString(); // file name of corresponding card
+				var card = {};
+				
+				if (j === 0) { // if ace, value = 11
+					card = {
+				    // rank: j+1, 
+				    suit: i+1,
+						value: 11,
+						image: "deckimg/"+ img +".png"
+					};
+				}
+				else if (j >= 10) { // if face card, value = 10
+					card = {
+				    // rank: j+1, 
+				    suit: i+1,
+						value: 10,
+						image: "deckimg/"+ img +".png"
+					};
+				}
+		   	else {
+		   		card = {
+				    // rank: j+1, 
+				    suit: i+1,
+						value: j+1,
+						image: "deckimg/"+ img +".png"
+					};
+				}
+			    deck.push(card);  // push newly created card(assoArray) into the deck array
 	    }
 	}
 	// console.log("deck of "+deck.length+" has been created");
@@ -276,6 +281,7 @@ function newDeck() {
 	//shuffle the deck
 	for (var i = 0; i < deck.length; i++) {
 		var randomIndex = Math.floor(Math.random()*deck.length);
+		// swap cards
 		var moveThis = deck[randomIndex];
 		deck[randomIndex] = deck[i];
 		deck[i] = moveThis;
@@ -290,7 +296,11 @@ function newDeck() {
 	// }
 }
 
-
+/**
+ * Deals cards depending on instruction
+ * @param  {int} num Specified to who, cards should be dealt
+ * @return {null}     NULL
+ */
 function deal(num) {
 	if (num === 0) {
 		// console.log("dealing...");
@@ -311,10 +321,6 @@ function deal(num) {
 			playerTotal += playerCards[t].value;
 			dealerTotal += dealerCards[t].value;
 		}
-		//playerTotal += playerCards[0].value;
-		//dealerTotal += dealerCards[0].value;
-		//playerTotal += playerCards[1].value;
-		//dealerTotal += dealerCards[1].value;
 
 		// console.log("PlayerTotal: "+playerTotal);
 		// console.log("DealerTotal: "+dealerTotal);
@@ -322,14 +328,20 @@ function deal(num) {
 		comment.text(handValues());
 	}
 
+	/*
+	Deal to player
+	 */
 	if (num === 1) {
 		playerCards.push(deck.shift());
 		playerTotal += playerCards[playerCards.length-1].value;
 		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[playerCards.length-1].image +'">'));
 		comment.text(handValues());
 	}
+	/*
+	Deal to Dealer
+	 */
 	if (num === 2) {
-		// replaces hold card src with actual index 1 card in dealerHand
+		// replaces hold card img with actual index 1 card in dealerHand
 		dealerHand[0].lastChild.src = dealerCards[1].image;
 		// document.querySelector('.dealerHand').lastChild.src = '';
 		
