@@ -28,6 +28,14 @@ body {
 	margin-bottom: 1%;
 }
 
+.dealer img:hover  #help{
+	display: block;
+}
+
+#help {
+	display: none;
+}
+
 /*.dealer-info {
 	text-align: center;
 	display: inline-block;
@@ -82,18 +90,6 @@ body {
 
 }
 
-#sitDown {
-	text-align: center;
-	position: fixed;
-	display: none;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0,0,0,.5);
-	padding: 12px;
-}
-
 .sitDownContent {
 	background-image: url("http://previews.123rf.com/images/schan/schan1111/schan111100204/11499989-granite-background-seamless-repeat-pattern--Stock-Photo.jpg");
 	background-size: cover;
@@ -105,17 +101,26 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-
+	padding: 12px;
+	color: lime;
 }
+
+#sitDown {
+	text-align: center;
+	position: fixed;
+	display: none;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,.5);
+}
+
 
 .submitBankAmt {
 	margin: 5% 0;
 	font-size: 2em;
 	width: 100%;
-}
-
-#howMuch, .doYouHave {
-	color: lime;
 }
 
 .red {
