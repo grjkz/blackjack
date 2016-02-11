@@ -524,6 +524,10 @@ function checkBJ() {
 		comment.text("Dealer won with Blackjack.");
 		dealerHand[0].lastChild.src = dealerCards[1].image;
 		toggleButtons(true);
+
+		if (playerBank <= 0) {
+			retry();
+		}
 	}
 }
 
