@@ -31,8 +31,6 @@ var splitTurn = false;
 
 /**
  * Load old save if exists
- * @param  {[type]} typeof(Storage) !             [description]
- * @return {[type]}                 [description]
  */
 if (typeof(Storage) !== 'undefined') {
 	if (!Number(localStorage.grjkz_blackjack_bank)) {
@@ -49,7 +47,7 @@ else {
 
 
 /**
- * Buy-in button handler
+ * Buy-in handler
  */
 $('.submitBankroll').click(function() {
 	if (parseInt($('.submitBankAmt').val()) > 0) {
@@ -62,7 +60,7 @@ $('.submitBankroll').click(function() {
 
 
 /**
- * Bet button handler
+ * Bet handler
  */
 betButton.click(function() {
 	initState();
@@ -85,17 +83,21 @@ betButton.click(function() {
 });
 
 
+/**
+ * Hit handler
+ */
 hit.click(function() {
 	split.css('visibility','hidden');
 	
-	if (!playerTotal2) {		//no split
+	// no split hand available
+	if (!playerTotal2) {
 		dbl.prop('disabled',true);
 		deal(1);
-		if (playerTotal > 21) { 	// if over 21, check for aces
+		if (playerTotal > 21) { // if over 21, check for aces
 			playerTotal = checkAce(playerCards, playerTotal);
 		}
 		comment.text(handValues());
-		if (playerTotal > 21) { 	// player is still over 21? end game
+		if (playerTotal > 21) { // player is still over 21? end game
 			winner();
 		}
 		if ((playerCards.length === 5) && (playerTotal < 22)) {
@@ -103,15 +105,15 @@ hit.click(function() {
 		}
 	}
 
-	else {		//split exists
+	// split hand exists
+	else {
 		if (!splitTurn) {
 			deal(1);
-			if (playerTotal > 21) { 	//if over 21, check for aces
+			if (playerTotal > 21) {
 				playerTotal = checkAce(playerCards, playerTotal);
 			}
 			comment.text(handValues());
-			if (playerTotal > 21) { 	// player is still over 21? end game
-				// console.log("player busted");
+			if (playerTotal > 21) {
 				splitTurn = true;
 				playAreaHighlight();
 			}
@@ -122,12 +124,11 @@ hit.click(function() {
 		}
 		else {
 			deal(3);
-			if (playerTotal2 > 21) { 	//if over 21, check for aces
+			if (playerTotal2 > 21) {
 				playerTotal2 = checkAce(playerCards2, playerTotal2);
 			}
 			comment.text(handValues());
-			if (playerTotal2 > 21) { 	// player is still over 21? end game
-				// console.log("player busted");
+			if (playerTotal2 > 21) {
 				winner();
 			}
 			if ((playerCards2.length === 5) && (playerTotal2 < 22)) {
@@ -151,7 +152,7 @@ dbl.click(function() {
 		//no split hand
 		if (!playerTotal2) {
 			playerBank -= bet;
-			bet *=2;
+			bet *= 2;
 			bankOutput.text(playerBank);
 			deal(1);
 			if (playerTotal > 21) {
@@ -204,6 +205,7 @@ dbl.click(function() {
 	}
 });
 
+
 /**
  * Stand handler
  */
@@ -224,6 +226,7 @@ stand.click(function() {
 		}
 	}
 });
+
 
 /**
  * Split handler
@@ -253,7 +256,13 @@ split.click(function() {
 
 
 
-///////////////////////////  FUNCTIONS
+//////////////
+//FUNCTIONS //
+//////////////
+
+/**
+ * Initialize 
+ */
 function initState() {
 	dealAreas.empty();
 	$('.animated').removeClass('flash animated slideInRight faceInDown');
@@ -272,14 +281,11 @@ function initState() {
 	playerTotal = 0;
 	playerTotal2 = 0;
 	dealerTotal = 0;
-	
-	console.log("init ran");
 }
 
 
 /**
  * Creates a new in-order deck
- * @return {null} NULL
  */
 function newDeck() {
 	// push each card into deck[]
@@ -321,7 +327,6 @@ function newDeck() {
 			    deck.push(card);  // push newly created card(assoArray) into the deck array
 	    }
 	}
-	// console.log("deck of "+deck.length+" has been created");
 
 	//shuffle the deck
 	for (var i = 0; i < deck.length; i++) {
@@ -331,19 +336,12 @@ function newDeck() {
 		deck[randomIndex] = deck[i];
 		deck[i] = moveThis;
 	}
-	// console.log("deck has been shuffled");
-	
-	
-	// //displays imgs of the shuffled deck
-	// for (var i = 0; i < deck.length; i++) {
-		// console.log("rank: "+deck[i].rank + "  suit: "+ deck[i].suit);
-	// 	$('.deck').append($('<img class="smallImg" src="'+ deck[i].image +'">'));
-	// }
 }
+
 
 /**
  * Deals cards depending on instruction
- * @param  {int} num Specified to who, cards should be dealt
+ * @param  {int} num Specified to whom cards should be dealt
  * @return {null}     NULL
  */
 function deal(num) {
@@ -366,9 +364,6 @@ function deal(num) {
 			playerTotal += playerCards[t].value;
 			dealerTotal += dealerCards[t].value;
 		}
-
-		// console.log("PlayerTotal: "+playerTotal);
-		// console.log("DealerTotal: "+dealerTotal);
 
 		comment.text(handValues());
 	}
@@ -428,9 +423,10 @@ function toggleButtons(bool) {
 		betButton.prop('disabled',!bool);
 	
 }
+
+
 /**
  * Determine's the winner
- * Called when when player can't hit or has maximum # of cards
  */
 function winner() {  //checks for bust and compares hands
 	if (playerTotal > 21) {
@@ -463,8 +459,8 @@ function winner() {  //checks for bust and compares hands
 		comment.text("Error?");
 	}
 
-
-	if (playerTotal2) {		//calculate for split hand
+	// determine winner for split hand
+	if (playerTotal2) {
 		if (playerTotal2 > 21) {
 			// console.log("split bust");
 			comment.text("Player Bust");
