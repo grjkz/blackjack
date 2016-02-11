@@ -34,10 +34,13 @@ var splitTurn = false;
  */
 if (typeof(Storage) !== 'undefined') {
 	if (!Number(localStorage.grjkz_blackjack_bank)) {
+		console.log('no saved game')
 		$('#sitDown').toggle();
 	}
 	else {
-		startGame(Number(localStorage.grjkz_blackjack_bank));
+		console.log('grabbed saved $')
+		playerBank = Number(localStorage.grjkz_blackjack_bank);
+		startGame(playerBank);
 	}
 
 }
@@ -51,8 +54,8 @@ else {
  */
 $('.submitBankroll').click(function() {
 	if (parseInt($('.submitBankAmt').val()) > 0) {
-		
-		playerBank = startGame(parseInt($('.submitBankAmt').val()));
+		playerBank = Number($('.submitBankAmt').val());
+		startGame(playerBank);
 		//close modal
 		$('#sitDown').toggle();
 	}
@@ -64,12 +67,12 @@ $('.submitBankroll').click(function() {
  */
 betButton.click(function() {
 	initState();
-	bet = parseInt(betAmt.val());
+	bet = Number(betAmt.val());
 	if (bet > playerBank) {
 		comment.text("You don't have that much money.");
 	}
 	// Start the round
-	else if (bet > 0) {
+	else if (bet <= playerBank && bet > 0) {
 		playerBank -= bet;
 		bankOutput.text(playerBank);
 		deal(0); 
@@ -598,8 +601,7 @@ function playAreaHighlight() {
  */
 function startGame(cash) {
 	initState();
-	playerBank = cash;
-	bankOutput.text(playerBank);
+	bankOutput.text(cash);
 	betButton.prop('disabled',false);
 }
 
