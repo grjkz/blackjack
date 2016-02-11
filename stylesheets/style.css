@@ -84,13 +84,14 @@ body {
 
 #sitDown {
 	text-align: center;
-	position: absolute;
+	position: fixed;
 	display: none;
 	top: 0;
 	right: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0,0,0,.5);
+	padding: 12px;
 }
 
 .sitDownContent {
@@ -108,8 +109,9 @@ body {
 }
 
 .submitBankAmt {
-	margin-top: 5%;
+	margin: 5% 0;
 	font-size: 2em;
+	width: 100%;
 }
 
 #howMuch, .doYouHave {
