@@ -9,6 +9,7 @@ $$$
 ## Features
 * Enter as much starting money as you want
 * Bet as much as you want
+* You bank balance is saved every round
 * Dealer and Player's hand value totals are displayed at the middle of the table for convenience (so you don't have to do the math yourself!)
 * Buttons are enabled/disabled accordingly
 * Visual cues are used for those who enjoy fast games
