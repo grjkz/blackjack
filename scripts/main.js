@@ -29,16 +29,15 @@ var splitTurn = false;
 
 /////////////////	INITIAL STUFF
 
+
 /**
  * Load old save if exists
  */
 if (typeof(Storage) !== 'undefined') {
 	if (!Number(localStorage.grjkz_blackjack_bank)) {
-		console.log('no saved game')
 		$('#sitDown').toggle();
 	}
 	else {
-		console.log('grabbed saved $')
 		playerBank = Number(localStorage.grjkz_blackjack_bank);
 		startGame(playerBank);
 	}
@@ -140,6 +139,7 @@ hit.click(function() {
 		}
 	}
 });
+
 
 /**
  * Double Down handler
@@ -257,8 +257,6 @@ split.click(function() {
 });
 
 
-
-
 //////////////
 //FUNCTIONS //
 //////////////
@@ -330,7 +328,6 @@ function newDeck() {
 			    deck.push(card);  // push newly created card(assoArray) into the deck array
 	    }
 	}
-
 	//shuffle the deck
 	for (var i = 0; i < deck.length; i++) {
 		var randomIndex = Math.floor(Math.random()*deck.length);
@@ -358,7 +355,6 @@ function deal(num) {
 		
 		playerCards.push(deck.shift());
 		playerHand.append($('<img class="fadeInDown animated smallImg" src="'+ playerCards[1].image +'">'));
-
 		//hole card
 		dealerCards.push(deck.shift());
 		dealerHand.append($('<img class="fadeInDown animated smallImg" src="deckimg/hole.png">')); // hole card img
@@ -367,7 +363,6 @@ function deal(num) {
 			playerTotal += playerCards[t].value;
 			dealerTotal += dealerCards[t].value;
 		}
-
 		// check for double aces in hands
 		if (playerTotal > 21) {
 			checkAce(playerCards, playerTotal);
@@ -378,7 +373,6 @@ function deal(num) {
 
 		comment.text(handValues());
 	}
-
 	/*
 	Deal to player
 	 */
@@ -411,7 +405,6 @@ function deal(num) {
 		// console.log("Dealer has a total of: "+dealerTotal);
 		winner();
 	}
-
 	/*
 	Deal to player's split hand
 	 */
@@ -427,12 +420,10 @@ function deal(num) {
  * Deactivate bet button and activate others
  */
 function toggleButtons(bool) {
-
 		hit.prop('disabled',bool);
 		stand.prop('disabled',bool);
 		dbl.prop('disabled',bool);
 		betButton.prop('disabled',!bool);
-	
 }
 
 
@@ -516,6 +507,10 @@ function winner() {  //checks for bust and compares hands
 	}
 }
 
+
+/**
+ * Checks for Blackjack in both hands
+ */
 function checkBJ() {
 	if ((playerTotal === 21) && (dealerTotal === 21)) {
 		dealerHand[0].lastChild.src = dealerCards[1].image;
@@ -535,6 +530,7 @@ function checkBJ() {
 		toggleButtons(true);
 	}
 }
+
 
 /**
  * checks for any aces and RETURNS ADJUSTED TOTAL when below 22
