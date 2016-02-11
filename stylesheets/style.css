@@ -1,28 +1,21 @@
-/** {
-	border: black solid 2px;
-}*/
-
 body {
-/*	text-align: center;*/
-/*	width: 1300px;*/
 	min-width: 855px;
-	/*height: 600px;*/
 	background-image: url("../img/table.jpg");
 }
 
 .hit,.stand,.double {
 	margin: 10%;
 }
+
 .split {
 	margin: 10%;
 	visibility: hidden;
 }
+
 .dealer {
-/*	text-align: left;
-	display: inline-block;
-	position: relative;*/
-	
+
 }
+
 .dealer img {
 	width: 70px;
 	margin-bottom: 1%;
@@ -36,19 +29,6 @@ body {
 	display: none;
 }
 
-/*.dealer-info {
-	text-align: center;
-	display: inline-block;
-	position: absolute;
-}
-.dealer-name {
-	margin-bottom: 30%;
-}
-.deal-total {
-	width: 50px;
-	
-}*/
-
 .dealArea {
 	height: 150px;
 	border: solid 1px white;
@@ -58,26 +38,23 @@ body {
 .largeRow {
 	max-width: initial;
 	width: 81%;
-
 }
 
 .comment {
 	padding: 5px;
-/*	height: 50px;*/
 	color: yellow;
 	font-size: 1.5em;
 	min-height: 2em;
 }
 
 .bank, .bankWord {
-/*	float: left;*/
 	margin-top: 5px;
 	margin-right: 10px;
 	color: orange;
 
 }
 .betButton, .betAmt {
-/*	float:right;*/
+
 }
 
 .smallImg {
@@ -102,6 +79,10 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	padding: 12px;
+}
+
+.sitDownContent p, 
+.sitDownContent h1 {
 	color: lime;
 }
 
