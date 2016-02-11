@@ -14,7 +14,7 @@ $$$
 * Buttons are enabled/disabled accordingly
 * Visual cues are used for those who enjoy fast games
 	* Flashing border indicates winning hand
-	* Red border (when splitting) indicates which hand you next action will affect
+	* Red border (when splitting) indicates which hand your next action will affect
 
 ## Technology/Frameworks
 * Javascript
