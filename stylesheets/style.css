@@ -53,14 +53,18 @@ body {
 	min-height: 2em;
 }
 
+.playerBank {
+	text-align: center;
+}
+
 .bank, .bankWord {
 	margin-top: 5px;
 	margin-right: 10px;
 	color: orange;
-
 }
-.betButton, .betAmt {
 
+.betButton, .betAmt {
+	text-align: center;
 }
 
 .smallImg {

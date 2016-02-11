@@ -35,46 +35,45 @@
 	<div class='row largeRow'>
 		<div class='small-12 small-centered columns comment'>Comments Area</div>
 	</div>
-	<div class='row largeRow'>	
-		<div class='small-6 columns dealArea playerHand'>Player's Cards
+	<div class='row largeRow playerArea'>
+		<div class="small-8 columns playerHands">
+			<div class='row dealArea playerHand'>Player's Cards</div>
+			<div class='row dealArea splitArea'>Split Area</div>
 		</div>
-			<div class="small-6 columns dealArea splitArea">Split Area
+
+		<div class="small-4 columns playerActions">
+			<div class="row">
+				<div class="small-12 columns">
+					<p class='playerBank'><span class='bankWord'>Bank: </span><span class='bank'>0</span></p>
+				</div>
 			</div>
+			<div class="row collapse">
+				<div class="small-6 columns">
+					<button class='prefix betButton' disabled>Bet</button>
+				</div>
+				<div class="small-6 columns">
+					<input class='betAmt' type="text" placeholder='$$$'/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="small-6 columns">
+					<button class='hit' disabled>Hit</button>
+				</div>
+				<div class="small-6 columns">
+					<button class='stand' disabled>Stand</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="small-6 columns">
+					<button class='double' disabled>Double</button>
+				</div>
+				<div class="small-6 columns">
+					<button class='split'>Split</button>
+				</div>
+			</div>
+		</div>
 	</div>
-
-
-<div class="row">
-	<div class="small-10 small-push-2 columns actions">
-		<div class="small-3 columns">
-			<button class='hit' disabled>Hit</button>
-		</div>
-		<div class="small-3 columns">
-			<button class='stand' disabled>Stand</button>
-		</div>
-		<div class="small-3 columns">
-			<button class='double' disabled>Double</button>
-		</div>
-		<div class="small-3 columns">
-			<button class='split'>Split</button>
-		</div>
-	</div>
-</div>
-
-
-<div class="row">
-	<p class='small-1 column bankWord'>Bank:</p>
-	<p class='bank'>0</p>
-    <div class="small-5 columns">
-      <div class="row collapse prefix-radius">
-        <div class="small-3 columns">
-         <button class='prefix betButton' disabled>Bet</button>
-        </div>
-        <div class="small-2 end columns">
-          <input class='small-1 medium-1 columns betAmt' type="text" placeholder='$$$'/>
-        </div>
-      </div>
-    </div>
-</div>
+	
 
 <!-- Modal -->
 
