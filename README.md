@@ -10,7 +10,7 @@ $$$
 * Enter as much starting money as you want
 * Bet as much as you want
 * You bank balance is saved every round
-* Dealer and Player's hand value totals are displayed at the middle of the table for convenience (so you don't have to do the math yourself!)
+* Dealer and Player's hand value totals are displayed at the middle of the table for convenience (cuz no one likes math)
 * Buttons are enabled/disabled accordingly
 * Visual cues are used for those who enjoy fast games
 	* Flashing border indicates winning hand
