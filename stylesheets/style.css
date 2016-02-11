@@ -36,9 +36,8 @@ body {
 }
 
 .dealArea {
-	height: 150px;
+	min-height: 150px;
 	border: solid 1px white;
-	display; inline-block;
 }
 
 .largeRow {
@@ -69,12 +68,8 @@ body {
 
 .smallImg {
 	position: relative;
-	max-height: 85%;
+	max-height: 128px;
 	margin: 10px;
-}
-
-.playerHand {
-
 }
 
 .sitDownContent {
@@ -106,7 +101,6 @@ body {
 	height: 100%;
 	background-color: rgba(0,0,0,.5);
 }
-
 
 .submitBankAmt {
 	margin: 5% 0;
