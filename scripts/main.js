@@ -365,6 +365,14 @@ function deal(num) {
 			dealerTotal += dealerCards[t].value;
 		}
 
+		// check for double aces in hands
+		if (playerTotal > 21) {
+			checkAce(playerCards, playerTotal);
+		}
+		if (dealerTotal > 21) {
+			checkAce(dealerCards, dealerTotal);
+		}
+
 		comment.text(handValues());
 	}
 
