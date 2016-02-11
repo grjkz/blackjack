@@ -3,12 +3,7 @@ body {
 	background-image: url("../img/table.jpg");
 }
 
-.hit,.stand,.double {
-	margin: 10%;
-}
-
 .split {
-	margin: 10%;
 	visibility: hidden;
 }
 
@@ -110,4 +105,8 @@ body {
 
 .red {
 	border: solid 3px red;
+}
+
+#swapSides {
+	float: right;
 }

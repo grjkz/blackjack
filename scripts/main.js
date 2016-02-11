@@ -610,3 +610,16 @@ function retry() {
 	$('#howMuch').text("You lost all your money");
 	$('.doYouHave').text("Would you like to play again?");
 }
+
+
+/////////////////
+// Extra Stuff //
+/////////////////
+
+/**
+ * Switches the set of buttons and player hands from left to right and vice versa
+ * This is for people who want to use their right or left hands
+ */
+$('#swapSides').click(function() {
+	$('.playerArea > div:first-child').appendTo($('.playerArea'));
+});
