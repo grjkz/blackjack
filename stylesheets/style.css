@@ -61,6 +61,15 @@ body {
 	text-align: center;
 }
 
+.hit,
+.double,
+.split,
+.stand {
+	width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .smallImg {
 	position: relative;
 	max-height: 128px;
