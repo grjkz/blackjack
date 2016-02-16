@@ -3,6 +3,10 @@ body {
 	background-image: url("../img/table.jpg");
 }
 
+.modal {
+	z-index: 50;
+}
+
 .split {
 	visibility: hidden;
 }
